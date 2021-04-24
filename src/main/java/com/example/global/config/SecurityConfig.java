@@ -19,7 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**")
                 .permitAll()
                 .anyRequest()
-                .authenticated();
+                .permitAll();
     }
 
     @Bean
@@ -27,4 +27,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   {
       return new BCryptPasswordEncoder();
   }
+
+
 }
