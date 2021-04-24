@@ -1,5 +1,6 @@
 package com.example.global.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,10 +21,12 @@ public class Alimentation {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "tramSolde_id",referencedColumnName = "id")
+    @JsonIgnore
     private TramSolde tramSolde ;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "voyageur_id",referencedColumnName = "id")
+    @JsonIgnore
     private Voyageur voyageur ;
 
     public Alimentation(float montant ,Date dateAlimentation)
