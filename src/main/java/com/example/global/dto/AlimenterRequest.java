@@ -7,4 +7,5 @@ import lombok.Setter;
 public class AlimenterRequest {
     private Long id ;
     private float montant ;
+    private String cardNumber ;
 }

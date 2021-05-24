@@ -1,40 +1,95 @@
 package com.example.global.metier;
 
-import com.example.global.dao.AlimentationRepository;
-import com.example.global.dao.TramSoldeRepository;
-import com.example.global.dao.VoyageurRepository;
+import com.example.global.dao.*;
 import com.example.global.dto.AlimenterRequest;
+import com.example.global.dto.GenerateTicketRequest;
 import com.example.global.entities.Alimentation;
+import com.example.global.entities.Eticket;
+import com.example.global.entities.TramSolde;
 import com.example.global.entities.Voyageur;
+import com.example.global.util.LuhnUtil;
+import com.example.global.util.TrackerUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
+
 @Service
 @AllArgsConstructor
 public class VoyageurService {
     private final AlimentationRepository alimentationRepository ;
     private final VoyageurRepository voyageurRepository ;
     private final TramSoldeRepository tramSoldeRepository ;
-    public List<Alimentation> getAllAlimentationByVoyageur(Long id)
-    {
-        Voyageur voyageur = voyageurRepository.findById(id).get();
-        return voyageur.getAlimentationList();
-    }
+    private final LigneRepository ligneRepository;
+    private final EticketRepository eticketRepository;
+    private final TrackerUtil trackerUtil;
+    private final LuhnUtil luhnUtil ;
+    private final EmailService emailService ;
+
 
     public Alimentation alimenter(AlimenterRequest alimenterRequest)
     {
+
         float montant = alimenterRequest.getMontant();
-        Long id = alimenterRequest.getId();
         Alimentation alimentation = new Alimentation(montant,new Date());
-        Voyageur voyageur = voyageurRepository.findById(id).get();
+        Voyageur voyageur = trackerUtil.getLoggedVoyageur();
         alimentation.setVoyageur(voyageur);
         alimentation.setTramSolde(voyageur.getTramSolde_attaché());
         voyageur.getTramSolde_attaché().setSolde(voyageur.getTramSolde_attaché().getSolde()+montant);
-        tramSoldeRepository.save(voyageur.getTramSolde_attaché());
-        alimentationRepository.save(alimentation);
+
+        if(luhnUtil.validateCreditCardNumber(alimenterRequest.getCardNumber()))
+        {
+            tramSoldeRepository.save(voyageur.getTramSolde_attaché());
+            alimentationRepository.save(alimentation);
+            /*send email of success operation after alimentation */
+            String subject ="Payement réussite";
+            String text = "Bonjour,\n\nvotre alimentation de compte tramway solde a bien reussi\nmontant : "+montant +"\nMerci pour votre confiance";
+            emailService.sendSimpleMessage(voyageur.getGmail(),subject,text);
+        }
+
+
         return alimentation ;
 
     }
+
+    public String generatetickets(GenerateTicketRequest gtr)
+    {
+        Voyageur voyageur = trackerUtil.getLoggedVoyageur();
+        TramSolde tramSolde = trackerUtil.getLoggedVoyageur().getTramSolde_attaché();
+        if(tramSolde.getSolde()>gtr.getPrix()*gtr.getNombre())
+        {
+            for(int i=0;i<gtr.getNombre();i++) {
+                Eticket ticket = new Eticket();
+                ticket.setDate(new Date());
+                ticket.setLigne(ligneRepository.findByLabel(gtr.getLigne()));
+                ticket.setTramSolde(voyageur.getTramSolde_attaché());
+                ticket.setPrix(gtr.getPrix());
+
+                tramSolde.setSolde(tramSolde.getSolde() - gtr.getPrix());
+                tramSoldeRepository.save(tramSolde);
+                eticketRepository.save(ticket);
+
+            }
+            return "reussite";
+
+        }
+        else{
+            return "votre solde n'est pas suiffisant pour acheter ce nombre de  tickets" ;
+        }
+
+
+    }
+
+    public List<Eticket> getAllTickets()
+    {
+        return eticketRepository.findByTramSolde(trackerUtil.getLoggedVoyageur().getTramSolde_attaché());
+    }
+
+    public List<Alimentation> getMyAlimentation()
+    {
+        return alimentationRepository.findByVoyageur(trackerUtil.getLoggedVoyageur());
+    }
+
 }

@@ -5,8 +5,12 @@ import org.springframework.stereotype.Component;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-@DiscriminatorValue("1")
+@DiscriminatorValue("admin")
 @Entity
-@Component
 public class Administrateur extends User{
+
+    public Administrateur()
+    {
+        this.setRole("admin");
+    }
 }

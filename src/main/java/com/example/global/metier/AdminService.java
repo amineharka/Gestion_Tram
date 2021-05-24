@@ -39,8 +39,9 @@ public class AdminService {
         ResponsableGuichet responsableGuichet = new ResponsableGuichet();
         responsableGuichet.setGmail(myRequest.getGmail());
         responsableGuichet.setPassword(passwordEncoder.encode(password));
+        responsableGuichet.setRole("responsable");
         responsableGuichetRepository.save(responsableGuichet);
-        emailService.sendSimpleMessage(myRequest.getGmail(),subject,text);
+        //Temporairement emailService.sendSimpleMessage(myRequest.getGmail(),subject,text);
         return responsableGuichet ;
     }
 

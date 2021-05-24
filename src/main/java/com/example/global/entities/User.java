@@ -10,9 +10,8 @@ import java.time.Instant;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.INTEGER)
+@DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.STRING)
 @Getter @Setter @NoArgsConstructor
-@Component
 public class User {
 
     @Id
@@ -27,6 +26,10 @@ public class User {
     private String phone ;
     private Boolean enabled ;
     private Instant created ;
+    private String username ;
+    @Column(name="myrole")
+    private String role ;
+    private String imageUrl;
 
     public User(String nom ,String prenom,String gmail,String cin,String password,String sexe,String phone)
     {

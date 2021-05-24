@@ -18,10 +18,18 @@ public class UserController {
 
 
 
-    @PutMapping("/updateProfile/{id}")
-    public ResponseEntity<User> updateProfile(@RequestBody User user,@PathVariable("id") Long id)
+    @PutMapping("/updateProfile")
+    public ResponseEntity<User> updateProfile(@RequestBody User user)
     {
-       return new ResponseEntity<>(userService.updateProfile(user,id), OK) ;
+       return new ResponseEntity<>(userService.updateProfile(user), OK) ;
     }
+
+    @GetMapping("/getCurrentUser")
+    public ResponseEntity<User> getCurrentUser()
+    {
+        return new ResponseEntity<User>(userService.getCurrentUser(), OK) ;
+    }
+
+
 
 }

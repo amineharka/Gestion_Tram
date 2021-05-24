@@ -11,12 +11,11 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@DiscriminatorValue("3")
+@DiscriminatorValue("voyageur")
 @Data
-@Component
 public class Voyageur extends User{
 
-    @OneToOne(optional = false)
+    @OneToOne
     @JoinColumn(name = "tramSolde_id", referencedColumnName = "id")
     @JsonIgnore
     private TramSolde tramSolde_attaché ;
@@ -24,6 +23,11 @@ public class Voyageur extends User{
     @OneToMany(mappedBy = "voyageur")
     @JsonIgnore
     List<Alimentation> alimentationList ;
+
+    public Voyageur()
+    {
+        this.setRole("voyageur");
+    }
 
 
 }

@@ -6,8 +6,15 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("2")
-@Component
+@DiscriminatorValue("responsable")
 public class ResponsableGuichet extends User{
     private String agence ;
+
+    public ResponsableGuichet()
+    {
+        this.setRole("responsable");
+    }
+
 }
+
+

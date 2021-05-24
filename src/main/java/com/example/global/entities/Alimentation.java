@@ -17,6 +17,7 @@ public class Alimentation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
     private float montant ;
+    @Temporal(TemporalType.DATE)
     private Date dateAlimentation ;
 
     @ManyToOne(optional = false)

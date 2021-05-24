@@ -1,5 +1,6 @@
 package com.example.global.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,7 @@ public class Ligne {
     private Long id ;
     private String label ;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "ligne")
     List<Station> stationList;
 
