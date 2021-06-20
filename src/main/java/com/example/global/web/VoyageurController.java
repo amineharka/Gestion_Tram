@@ -2,6 +2,7 @@ package com.example.global.web;
 
 import com.example.global.dto.AlimenterRequest;
 import com.example.global.dto.GenerateTicketRequest;
+import com.example.global.dto.GlobaIinformation;
 import com.example.global.entities.Alimentation;
 import com.example.global.entities.Eticket;
 import com.example.global.metier.VoyageurService;
@@ -49,6 +50,11 @@ public class VoyageurController {
     {
         return new ResponseEntity<List<Eticket>>(voyageurService.getAllTickets(),HttpStatus.OK);
     }
+    @GetMapping("/getInfo")
+    public ResponseEntity<GlobaIinformation> getInfo(){
+        return new ResponseEntity<GlobaIinformation>(voyageurService.getInfo(),OK);
+    }
+
 
 
 }

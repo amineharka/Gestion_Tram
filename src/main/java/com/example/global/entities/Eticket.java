@@ -19,7 +19,7 @@ public class Eticket {
     private String code ;
     private float prix ;
     private Date date ;
-    private String status = "Non valide";
+    private String status = "Non_valide";
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "tramSolde_id", referencedColumnName = "id")

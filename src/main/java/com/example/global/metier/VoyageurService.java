@@ -3,6 +3,7 @@ package com.example.global.metier;
 import com.example.global.dao.*;
 import com.example.global.dto.AlimenterRequest;
 import com.example.global.dto.GenerateTicketRequest;
+import com.example.global.dto.GlobaIinformation;
 import com.example.global.entities.Alimentation;
 import com.example.global.entities.Eticket;
 import com.example.global.entities.TramSolde;
@@ -92,4 +93,14 @@ public class VoyageurService {
         return alimentationRepository.findByVoyageur(trackerUtil.getLoggedVoyageur());
     }
 
+    public GlobaIinformation getInfo() {
+        GlobaIinformation gi = new GlobaIinformation();
+        Voyageur voyageur = trackerUtil.getLoggedVoyageur();
+        gi.setSolde(voyageur.getTramSolde_attaché().getSolde());
+        gi.setTicket_v(eticketRepository.findByTramSoldeAndStatus(voyageur.getTramSolde_attaché(),"valide"));
+        gi.setTicket_nv(eticketRepository.findByTramSoldeAndStatus(voyageur.getTramSolde_attaché(),"Non_valide"));
+        gi.setAlimentations(voyageur.getAlimentationList());
+        gi.setEtickets(voyageur.getTramSolde_attaché().getEticketList());
+        return gi;
+    }
 }

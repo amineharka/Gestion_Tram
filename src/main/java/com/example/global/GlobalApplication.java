@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.Date;
 
 @SpringBootApplication
-public class GlobalApplication implements CommandLineRunner {
+public class GlobalApplication {
 
 	@Autowired
 	private ResponsableGuichetRepository rgp ;
@@ -46,11 +46,5 @@ public class GlobalApplication implements CommandLineRunner {
 		};
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-		User user = userRepository.findByGmail("admin@gmail.com");
-		System.out.println(user.getRole());
-		System.out.println(user.getSexe());
 
-	}
 }
