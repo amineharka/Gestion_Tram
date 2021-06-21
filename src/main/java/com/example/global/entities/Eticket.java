@@ -18,6 +18,7 @@ public class Eticket {
     private Long id ;
     private String code ;
     private float prix ;
+    @Temporal(TemporalType.DATE)
     private Date date ;
     private String status = "Non_valide";
 

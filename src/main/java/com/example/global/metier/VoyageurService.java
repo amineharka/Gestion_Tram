@@ -13,6 +13,7 @@ import com.example.global.util.TrackerUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -96,9 +97,11 @@ public class VoyageurService {
     public GlobaIinformation getInfo() {
         GlobaIinformation gi = new GlobaIinformation();
         Voyageur voyageur = trackerUtil.getLoggedVoyageur();
+        List<Eticket> valides = eticketRepository.findByTramSoldeAndStatus(voyageur.getTramSolde_attaché(),"valide");
+        List<Eticket> nonValides = eticketRepository.findByTramSoldeAndStatus(voyageur.getTramSolde_attaché(),"Non_valide");
         gi.setSolde(voyageur.getTramSolde_attaché().getSolde());
-        gi.setTicket_v(eticketRepository.findByTramSoldeAndStatus(voyageur.getTramSolde_attaché(),"valide"));
-        gi.setTicket_nv(eticketRepository.findByTramSoldeAndStatus(voyageur.getTramSolde_attaché(),"Non_valide"));
+        gi.setTicket_v(valides.size());
+        gi.setTicket_nv(nonValides.size());
         gi.setAlimentations(voyageur.getAlimentationList());
         gi.setEtickets(voyageur.getTramSolde_attaché().getEticketList());
         return gi;

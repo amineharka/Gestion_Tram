@@ -9,5 +9,5 @@ import java.util.List;
 public interface EticketRepository extends JpaRepository<Eticket,Long> {
     List<Eticket> findByTramSolde(TramSolde tramSolde_attaché);
 
-    int findByTramSoldeAndStatus(TramSolde tramSolde_attaché, String valide);
+    List<Eticket> findByTramSoldeAndStatus(TramSolde tramSolde_attaché, String valide);
 }
